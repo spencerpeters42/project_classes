@@ -1,0 +1,222 @@
+A movie retnal store requires a Python application to manage their
+movie inventory and rental processes. The application should allow
+users to add, update, remove, search for, rent, and return a movie.
+The application also allows the user to list movies by genre, list 
+popular movies based upon how many times they have been rented,
+check the movies availability by genre, and display a summary of the
+movies library.
+
+
+
+Methods:
+
+Constructor
+    Description:
+        - Initalize movie id, title, director, genre, available, price
+        and rental_count attributes.
+        - Use optional parameters for: available, price and rental_count.
+
+Getters
+    Description:
+        -Implement standard getters for each attribute.
+
+get_genre_name()
+    Description:
+        Implement an additional getter method that returns the name of 
+        the genre (as a string) according to the following table:
+        Genre   name
+        0       Action
+        1       Comedy
+        2       Drama
+        3       Horror
+        4       Sci-Fi
+        5       Romance
+        6       Thriller
+        7       Animation
+        8       Documentary
+        9       Fantasy
+            hint: implementing this table as a class/static constant would allow your application module to use it too.
+
+get_availability()
+    Description:
+        -Implement an additional getter method that returns a string based
+        on the available attribute, I.e., If True Then 'Available' Else 'Rented'.
+
+Setters
+    Description:
+        - Implement standard setter methods for all attributes except available and rental count attributes.
+
+borrow_movie()
+    Description:
+        -When borrowing a movie, it sets its available attribute to False and increases the rental count
+        attribute by 1.
+
+return_movie()
+    Description:
+        -When returning a movie, it sets its available attribute to True.
+
+__str__()
+    Description:
+        -Returns a formatted string representation of the movie.
+        ID      Title       Director        Genre   availability    Price$      Rental Count
+
+Create a separate module for your Movie Library Management application code 
+which will be comprised of various functions, including a main() entry function 
+to control overall processing. The functions listed below are required but you may 
+create additional functions to reduce the code redundancy.
+
+FUNCTIONS
+
+1. load_movies(file_name)
+    Description:
+        Parameters:
+            -File_name: The name of the file containing movie data.
+        Return Value:
+            -A list of Movie objects.
+        Description:
+            -Loads movies from a CSV file and returns them as a list of Movie Objects.
+
+2. save_movies(file_name, movies)
+    Description:
+        Parameters:
+            -file_name: The name of the file to save the movie data.
+            -movies: A list of Movie objects.
+        Return Value:
+            - # of movie lines written to file
+        Description:
+            -Saves the list of Movie objects to a CSV file.
+
+3. print_menu()
+    Description:
+        Parameters: None.
+        Return Value:
+            -The user's valid menu choice as a string.
+        Description:
+            -Displays the main menu and prompts the user for a valid choice.
+
+4. search_movies(movies, search_term)
+    Description:
+        Parameters:
+            -movies: A list of Movie objects.
+            -search_term: The term to search for in movie titles, directors, or genres.
+        Return Value:
+            -A list of matched Movie objects.
+        Description:
+            -Searches for movies that match that search term.
+
+5. find_movie_by_id(movies, movid_id)
+    Description:
+        Parameters:
+            -movies: A list of Movie objects.
+            -movie_id: The movie_id to locate in the list of Movie objects.
+        Return Value:
+            -The matches Movie object or -1 if not found.
+        Description:
+            -Searches for movies that match the search term.
+
+6. rent_movie(movies, movie_id)
+    Description:
+        Parameters:
+            -movies: A list of Movie objects.
+            -movie_id: The ID of the movie to rent.
+        Return Value:
+            -A string indicating the result of the rental attempt.
+        Description:
+            -Rents a movie by its ID if it is available.
+
+7. return_movie(movies, movie_id)
+    Description:
+        Parameters:
+            -movies: A list of Movie objects.
+            -movie_id: The ID of the movie to return.
+        Return Value:
+            -A string indicating the result of the return attempt.
+        Description:
+            -Returns a rented movie by its ID. Cannot return a movie that has not been rented.
+
+8. add_movie(movies)
+    Description:
+        Parameters:
+            -movies: A list of Movie objects.
+        Return Value:
+            -A string indicating the result of the add attempt.
+        Description:
+            -Adds a new movie to the library after prompting the user for details.
+            Cannot add a movie if the movie with that ID already exists in the list.
+
+9. remove_movie(movies)
+    Description:
+        Parameters:
+            -movies: A list of Movie objects.
+        Return Value:
+            -A string indicating the result of the remove attempt.
+        Description:
+            -Removes a movie from the library by its ID. Cannot remove a movie if a movie with ID does not exist in the list.
+
+10. update_movie_details(movies)
+    Description:
+        Parameters:
+            -movies: A list of Movie objects.
+        Return Value:
+            -A string indicating the result of the update attempt.
+        Description:
+            -Updates all the details of a movie by its ID.
+            Cannot edit a movie if a movie with ID does not exist in the list.
+        
+11. get_genre()
+    Description:
+        Parameters: None.
+        Return Value:
+            -The user's valid menu choice as a string.
+        Description:
+            -Displays the genre codes and descriptions and prompts the user for a valid choice.
+
+12. list_movies_by_genre(movies)
+    Description:
+        Parameters:
+            -movies: A list of Movie objects.
+        Return Value: None
+        Description:
+            -Lists all movies of a specified genre. Displays a list of movies in the specified genre, or no movies found.
+
+13. check_availability_by_genre(movies)
+    Description:
+        Parameters:
+            -movies: A list of Movie objects.
+        Return Value: None.
+        Description:
+            -Checks and displays the availability of movies in a specified genre.
+            Displays a list of movies that are available in the specified genre or no available movies.
+
+14. display_library_summary(movies)
+    Description:
+        Parameters:
+            -movies: A list of Movie objects.
+        Return Value: none.
+        Description:
+            -Displays a summary of the library, including the total number of movies,
+            number of available movies, and number of rented movies.
+
+15. popular_movies(movies)
+    Description:
+        Parameters:
+            -movies: A list of Movie objects.
+        Return Value: None.
+        Description:
+            -Displays all the movies that have a rental_count >= to the entered value.
+
+16. print_movies(movies)
+    Description:
+        Parameters:
+            -movies: A list of Movie objects.
+        Return Value: None.
+        Description:
+            -Prints a list of movies in a formatted table.
+
+17. main()
+    Description:
+        Parameters: None.
+        Return Value: None.
+        Description:
+            -The main function that runs the Movie Library Management System. It loads movies from a file, displays the menu,
+            and handles user interactions, write the movies to the file.
