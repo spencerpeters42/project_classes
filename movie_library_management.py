@@ -1,5 +1,25 @@
+import os
+from movie import Movie
+
 def load_movies(file_name):
-    pass
+    #Validating file path
+    if os.path.exists(file_name):
+        import_movie = open(file_name)
+        loaded_movies = 0
+        movie_catalog = list()
+
+        for each_line in import_movie:
+            each_line = each_line.split(',')
+            movie_catalog.append(Movie(each_line[0], each_line[1], each_line[2], each_line[3], each_line[4], each_line[5], each_line[6]))
+            loaded_movies += 1
+            return loaded_movies
+    else:
+        print('The catalog file \"', file_name, '\" is not found \n')
+        
+        user_input = input('Do you want to continue without loading a file (Yes/Y, No/N)? ').upper()
+        
+        pass    
+
 
 def save_movies(file_name, movies):
     pass
@@ -39,8 +59,10 @@ def print_menu():
 
 
 def main():
-    print_menu()
-
+    file_name = input('Enter the movie catalog filename: ')
+    load_catalog = load_movies(file_name)
+    print(load_catalog)
+    #print_menu()
     pass
 
 
