@@ -58,6 +58,9 @@ class Movie:
 
     def set_price(self, price):
         self.__price = price
+
+    def set_available(self, available):
+        self.__available = available
     
     def __str__():
         return "{:10s}{:30s}{:25s}{:12s}{:12s}{:>12s}{:>12s}".format("ID", "Title",

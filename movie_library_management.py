@@ -60,6 +60,50 @@ def search_movies(movies, search_term):
         i+=1
     return matches
 
+def find_movie_by_id(movies, movie_id):
+    '''
+    Parameters:
+        -movies: A list of Movie objects.
+        -movie_id: The movie_id to locate in the list of Movie objects.
+    Return Value:
+        -The matches Movie object or -1 if not found.
+    Description:
+        -Searches for movies that match that search term.
+    '''
+    i = 0
+    for movie in movies:
+        if(movie_id == movies[i].get_movie_id()):
+            return movies[i]
+        i += 1
+    
+    return -1
+
+
+def rent_movie(movies, movie_id):
+    '''
+    Parameters:
+        -movies: A list of Movie objects.
+        -movie_id: The ID of the movie to rent.
+    Return Value:
+        -A string indicating the result of the rental attempt.
+    Description:
+        -Rents a movie by its ID if it is available.
+    '''
+    #Check to find the movie with user inputted ID
+    rental = find_movie_by_id(movies, movie_id)
+    #Case 3: Movie is not found.
+    if(rental == -1):
+        return 'Movie with ID', movie_id, 'not found in library.\n'
+    else:
+        #Case 1: Movie available to rent and successfully rented
+        if(rental.get_available()):
+            rental.set_available(False)
+            success_msg = '\'' + rental.get_title() + '\' rented successfully.\n'
+            return success_msg
+        else:
+            #Case 2: Movie is unavailable to rent and not rented.
+            fail_msg = '\'' + rental.get_title() + '\' is already rented - cannot be rented again.\n'
+            return fail_msg
 
 def print_menu():
     '''
@@ -122,13 +166,17 @@ def main():
                     print(MENU_HEADER)
                     print(DASHES)
                     i = 0
+                    #Outputting each matching movie formatted properly
                     for movie in matched_movies:
                         print(f'{matched_movies[i].get_movie_id():<10}{matched_movies[i].get_title():<30}{matched_movies[i].get_director():<25}{matched_movies[i].get_genre_name():<12}{matched_movies[i].get_availability():<19} {matched_movies[i].get_price():<8}{matched_movies[i].get_rental_count():>9}', end='')
                         i += 1
                     print()
-                
+            #Rent a movie call
             elif(user_input == '2'):
-                pass
+                #Prompt the user for ID to rent
+                rent_id = input('Enter the movie ID to rent: ')
+                #Print result of rental attempt
+                print(rent_movie(catalog, rent_id))
             user_input = print_menu()
     #search_movies(catalog, 'the')
     pass
