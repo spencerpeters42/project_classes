@@ -2,27 +2,59 @@ import os
 from movie import Movie
 
 def load_movies(file_name):
+    '''
+    Parameters:
+        -file_name: The name of the file containing movie data.
+    Return Value:
+        -A list of Movie objects.
+    Description:
+        -Loads movies from a CSV file and returns them as a list of Movie Objects.
+    '''
     #Validating file path
     if os.path.exists(file_name):
         import_movie = open(file_name)
         loaded_movies = 0
         movie_catalog = list()
-
         for each_line in import_movie:
             each_line = each_line.split(',')
-            movie_catalog.append(Movie(each_line[0], each_line[1], each_line[2], each_line[3], each_line[4], each_line[5], each_line[6]))
+            movie_catalog.append(Movie(each_line[0], each_line[1], each_line[2], int(each_line[3]), each_line[4], each_line[5], each_line[6]))
             loaded_movies += 1
-            return loaded_movies
+        return movie_catalog
     else:
         print('The catalog file \"', file_name, '\" is not found \n')
         
         user_input = input('Do you want to continue without loading a file (Yes/Y, No/N)? ').upper()
         
-        pass    
+        if(user_input == 'Y' or user_input == 'YES'):
+            print('The Movie Library System is opened without loading catalog')
+            movie_catalog = list()
+            return movie_catalog
+        elif(user_input == 'N' or user_input == 'NO'):
+            print('The Movie Library System will not continue...')
+            return -1
 
 
 def save_movies(file_name, movies):
     pass
+
+def search_movies(movies, search_term):
+    '''
+    Parameters:
+        -movies: A list of Movie Objects.
+        -search_term: The term to search for in movie titles, directors, or genres.
+    Return Value:
+        -A list of matched Movie objects.
+    Description:
+        -Searches for movies that match that search term.
+    '''
+    i = 0
+    matches = []
+    for movie in movies:
+        if(search_term.upper() in movies[i].get_title().upper() or search_term.upper() in movies[i].get_genre_name().upper() or search_term.upper() in movies[i].get_director().upper()):
+            matches.append(movies[i])
+        i+=1
+    return matches
+
 
 def print_menu():
     '''
@@ -60,9 +92,9 @@ def print_menu():
 
 def main():
     file_name = input('Enter the movie catalog filename: ')
-    load_catalog = load_movies(file_name)
-    print(load_catalog)
+    catalog = load_movies(file_name)
     #print_menu()
+    search_movies(catalog, 'the')
     pass
 
 

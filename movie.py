@@ -35,7 +35,8 @@ class Movie:
     def get_genre_name(self):
         GENRE_NAME = {0: 'Action', 1: 'Comedy', 2: 'Drama', 3: 'Horror', 4: 'Sci-Fi',
         5: 'Romance', 6: 'Thriller', 7: 'Animation', 8: 'Documentary', 9: 'Fantasy'}
-        return GENRE_NAME[self.get_genre()]
+        genre_index = self.get_genre()
+        return GENRE_NAME.get(genre_index)
     
     def get_availability(self):
         if(self.get_availability()):
