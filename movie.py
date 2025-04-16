@@ -39,7 +39,7 @@ class Movie:
         return GENRE_NAME.get(genre_index)
     
     def get_availability(self):
-        if(self.get_availability()):
+        if(self.get_available()):
             return 'Available'
         else:
             return 'Rented'

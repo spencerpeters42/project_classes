@@ -1,5 +1,8 @@
 import os
 from movie import Movie
+#Define Constants
+MENU_HEADER = f'{'ID':<10}{'Title':<30}{'Director':<25}{'Genre':<12}{'Availability':<19}{'Price':<8}{'# Rentals':>9}'
+DASHES = '-' * 113
 
 def load_movies(file_name):
     '''
@@ -19,6 +22,7 @@ def load_movies(file_name):
             each_line = each_line.split(',')
             movie_catalog.append(Movie(each_line[0], each_line[1], each_line[2], int(each_line[3]), each_line[4], each_line[5], each_line[6]))
             loaded_movies += 1
+        print('')
         return movie_catalog
     else:
         print('The catalog file \"', file_name, '\" is not found \n')
@@ -26,7 +30,7 @@ def load_movies(file_name):
         user_input = input('Do you want to continue without loading a file (Yes/Y, No/N)? ').upper()
         
         if(user_input == 'Y' or user_input == 'YES'):
-            print('The Movie Library System is opened without loading catalog')
+            print('The Movie Library System is opened without loading catalog \n')
             movie_catalog = list()
             return movie_catalog
         elif(user_input == 'N' or user_input == 'NO'):
@@ -47,6 +51,7 @@ def search_movies(movies, search_term):
     Description:
         -Searches for movies that match that search term.
     '''
+    print('Searching for \"', search_term, '\" in title, director, or genre...', sep='')
     i = 0
     matches = []
     for movie in movies:
@@ -91,10 +96,41 @@ def print_menu():
 
 
 def main():
+    #Reads in file name
     file_name = input('Enter the movie catalog filename: ')
+    #Stores Movie objects in a list
     catalog = load_movies(file_name)
-    #print_menu()
-    search_movies(catalog, 'the')
+    if(catalog == -1):
+        print('Movie Library System Closed Successfully\n')
+    else:
+        #Display menu and get valid user selection
+        user_input = print_menu()
+        #Continue displaying menu until user selects Exit the system.
+        while user_input != '0':
+            #Search for movies call
+            if(user_input == '1'):
+                #Prompt the user for search term
+                search_term = input('Enter search term: ')
+                #Call and store list of Movie objects that match search term
+                matched_movies = search_movies(catalog, search_term)
+                #Check if matched movies is empty
+                if(len(matched_movies) == 0):
+                    print('No matching movies found.\n')
+                else:
+                    #Display all matched movies
+                    print()
+                    print(MENU_HEADER)
+                    print(DASHES)
+                    i = 0
+                    for movie in matched_movies:
+                        print(f'{matched_movies[i].get_movie_id():<10}{matched_movies[i].get_title():<30}{matched_movies[i].get_director():<25}{matched_movies[i].get_genre_name():<12}{matched_movies[i].get_availability():<19} {matched_movies[i].get_price():<8}{matched_movies[i].get_rental_count():>9}', end='')
+                        i += 1
+                    print()
+                
+            elif(user_input == '2'):
+                pass
+            user_input = print_menu()
+    #search_movies(catalog, 'the')
     pass
 
 
