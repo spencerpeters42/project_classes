@@ -1,5 +1,6 @@
 class Movie:
     '''A class that stores information about movies.'''
+
     #Constructor
     def __init__(self, movie_id, title, director, genre, available, price, rental_count):
         self.__movie_id = movie_id
@@ -9,6 +10,8 @@ class Movie:
         self.__available = available
         self.__price = price
         self.__rental_count = rental_count
+        self.__GENRE_NAME = {0: 'Action', 1: 'Comedy', 2: 'Drama', 3: 'Horror', 4: 'Sci-Fi',
+        5: 'Romance', 6: 'Thriller', 7: 'Animation', 8: 'Documentary', 9: 'Fantasy'}
     
     #Getters
     def get_movie_id(self):
@@ -33,16 +36,22 @@ class Movie:
         return self.__rental_count
     
     def get_genre_name(self):
-        GENRE_NAME = {0: 'Action', 1: 'Comedy', 2: 'Drama', 3: 'Horror', 4: 'Sci-Fi',
-        5: 'Romance', 6: 'Thriller', 7: 'Animation', 8: 'Documentary', 9: 'Fantasy'}
         genre_index = self.get_genre()
-        return GENRE_NAME.get(genre_index)
+        genre_get = self.__GENRE_NAME.get(genre_index)
+        return genre_get
     
     def get_availability(self):
         if(self.get_available()):
             return 'Available'
         else:
             return 'Rented'
+        
+    def list_genre(self):
+        return self.__GENRE_NAME
+    
+    def get_genre_keys(self):
+        return self.__GENRE_NAME.keys()
+    
     #Setters
     def set_movie_id(self, movie_id):
         self.__movie_id = movie_id
@@ -61,6 +70,9 @@ class Movie:
 
     def set_available(self, available):
         self.__available = available
+    
+    def set_rental_count(self, rental_count):
+        self.__rental_count = rental_count
     
     def __str__():
         return "{:10s}{:30s}{:25s}{:12s}{:12s}{:>12s}{:>12s}".format("ID", "Title",

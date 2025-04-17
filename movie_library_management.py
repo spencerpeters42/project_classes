@@ -91,19 +91,103 @@ def rent_movie(movies, movie_id):
     '''
     #Check to find the movie with user inputted ID
     rental = find_movie_by_id(movies, movie_id)
-    #Case 3: Movie is not found.
+
     if(rental == -1):
-        return 'Movie with ID', movie_id, 'not found in library.\n'
+        #Case 1: Movie is not found.
+        not_found = 'Movie with ID ' + movie_id + ' not found in library. \n'
+        return not_found
     else:
-        #Case 1: Movie available to rent and successfully rented
+        #Check to see if rental is available
         if(rental.get_available()):
+            #Grab current rental count
+            rent_cnt = int(rental.get_rental_count())
+            #Increment the rental count
+            rental.set_rental_count(rent_cnt + 1)
+            #Set movie to unavailable
             rental.set_available(False)
+            #Case 2: Movie available to rent and successfully rented
             success_msg = '\'' + rental.get_title() + '\' rented successfully.\n'
             return success_msg
         else:
-            #Case 2: Movie is unavailable to rent and not rented.
+            #Case 3: Movie is unavailable to rent and not rented.
             fail_msg = '\'' + rental.get_title() + '\' is already rented - cannot be rented again.\n'
             return fail_msg
+
+def return_movie(movies, movie_id):
+    '''
+    Parameters:
+        -movies: A list of Movie objects.
+        -movie_id: The ID of the movie to return.
+    Return Value:
+        -A string indicating the result of the return attempt.
+    Description:
+        -Returns a rented movie by its ID. Cannot return a movie that has not been rented.
+    '''
+    movie_return = find_movie_by_id(movies, movie_id)
+
+    if(movie_return == -1):
+        not_found = 'Movie with ID ' + movie_id + ' not found in library. \n'
+        return not_found
+    else:
+        if(movie_return.get_available()):
+            fail_msg = '\'' + movie_return.get_title() + '\' was not rented - cannot be returned. \n'
+            return fail_msg
+        else:
+            movie_return.set_available(True)
+            success_msg = '\'' + movie_return.get_title() + '\' was returned successfully. \n'
+            return success_msg
+
+def add_movie(movies):
+    '''
+    Parameters:
+        -movies: A list of Movie objects.
+    Return Value:
+        -A string indicating the result of the add attempt.
+    Description:
+        -Adds a new movie to the library after prompting the user for details.
+        Cannot add a movie fi the movie with that ID already exists in the list.
+    '''
+    
+    #Query user for ID
+    ui_id = input('Enter movie ID: ')
+
+    i = 0
+    #Check to see if ID already exists
+    for movie in movies:
+        if(ui_id == movies[i].get_movie_id()):
+            fail_msg = 'Movie with ID ' + ui_id + ' already exists - cannot be added to library \n'
+            #Case 1: Cannot Add Movie because of conflicting ID 
+            return fail_msg
+        i += 1
+    #Query user for title
+    ui_title = input('Enter title: ')
+    #Query user for director name
+    ui_director = input('Enter director: ')
+
+    #Retrieve Genre Names and Keys
+    genre_list = movies[0].list_genre()
+    genre_keys = movies[0].get_genre_keys()
+    i = 0
+    #Output possible genres
+    print('\n\tGenres')
+    for item in range(len(genre_list)):
+        #Format output
+        current_index = str(i) + ')'
+        print(f'{'\t'}{current_index}{genre_list[i]}')
+        i += 1
+    #Query user for genre selection
+    ui_genre = int(input('\tChoose genre(0-9): '))
+    
+    #Validate Genre selection
+    while ui_genre not in genre_keys:
+        print('Invalid Genre: Enter a valid genre (0-9)')
+        ui_genre = int(input('\tChoose genre(0-9): '))
+    #Query user for price of movie
+    ui_price = float(input('\nEnter price: '))
+    #Add movie to catalog, making it available to rent and setting rental count to 0
+    movies.append(Movie(ui_id, ui_title, ui_director, ui_genre, True, ui_price, 0))
+    #Case 2: Successfully Add Movie with no Conflicting ID
+    return 'Movie ' + '\'' + ui_title + '\'' + ' added to library successfully .\n'
 
 def print_menu():
     '''
@@ -151,7 +235,7 @@ def main():
         user_input = print_menu()
         #Continue displaying menu until user selects Exit the system.
         while user_input != '0':
-            #Search for movies call
+            #Search for movies function call
             if(user_input == '1'):
                 #Prompt the user for search term
                 search_term = input('Enter search term: ')
@@ -171,14 +255,24 @@ def main():
                         print(f'{matched_movies[i].get_movie_id():<10}{matched_movies[i].get_title():<30}{matched_movies[i].get_director():<25}{matched_movies[i].get_genre_name():<12}{matched_movies[i].get_availability():<19} {matched_movies[i].get_price():<8}{matched_movies[i].get_rental_count():>9}', end='')
                         i += 1
                     print()
-            #Rent a movie call
+            #Rent a movie function call
             elif(user_input == '2'):
                 #Prompt the user for ID to rent
                 rent_id = input('Enter the movie ID to rent: ')
                 #Print result of rental attempt
                 print(rent_movie(catalog, rent_id))
+            #Return a movie function call
+            elif(user_input == '3'):
+                #Prompt the user for ID to return
+                return_id = input('Enter the movie ID to return: ')
+                #Print result of return attempt
+                print(return_movie(catalog, return_id))
+            #Add a movie function call
+            elif(user_input == '4'):
+                #Call add_movie function and print resulting message
+                print(add_movie(catalog))
+                pass
             user_input = print_menu()
-    #search_movies(catalog, 'the')
     pass
 
 
