@@ -2,7 +2,7 @@ class Movie:
     '''A class that stores information about movies.'''
 
     #Constructor
-    def __init__(self, movie_id, title, director, genre, available, price, rental_count):
+    def __init__(self, movie_id, title, director, genre, available, price, rental_count = 0):
         self.__movie_id = movie_id
         self.__title = title
         self.__director = director

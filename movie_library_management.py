@@ -189,6 +189,95 @@ def add_movie(movies):
     #Case 2: Successfully Add Movie with no Conflicting ID
     return 'Movie ' + '\'' + ui_title + '\'' + ' added to library successfully .\n'
 
+def remove_movie(movies):
+    '''
+    Parameters:
+        -movies: A list of Movie objects.
+    Return Value:
+        -A string indicating the result of the remove attempt.
+    Description:
+        -Removes a movie from the library by its ID.
+        Cannot remove a movie if a movie with ID does not exist in the library
+    '''
+    #Query user for ID
+    user_input = int(input('Enter the movie ID to remove: '))
+    i = 0
+    #Look through all movies for ID
+    for movie in movies:
+        #Check to see if ID is in list
+        if(user_input == int(movies[i].get_movie_id())):
+            #Store title for success message
+            del_title = movies[i].get_title()
+            #Delete Movie
+            del movies[i]
+            #Return success string
+            return 'Movie \'' + del_title + '\' has been removed from library successfully.\n'  
+        i += 1
+    #Movie was not found, return error message
+    return 'Movie with ID ' + str(user_input) + ' not found in library - cannot be removed.\n'
+
+def update_movie_details(movies):
+    '''
+    Parameters:
+        -movies: A list of Movie objects
+    Return Value:
+        -A string indicating the result of the update attempt.
+    Description:
+        -Updates all the details of a movie by its ID.
+        Cannot edit a movie if a movie with ID does not exist in the list.
+    '''
+    #Prompt the user for ID
+    ui_id = int(input('Enter the movie ID to update: '))
+    i = 0
+    #Check to see if ID is in list
+    for movie in movies:
+        if(ui_id == int(movies[i].get_movie_id())):
+            #Update Movie
+            print('Leave fields blank to keep current values.')
+            #Prompt user for title
+            ui_title = input('Enter new title (current: ' + movies[i].get_title() + '): ')
+            #Check to see if blank
+            if(ui_title != ''):
+                #Update title
+                movies[i].set_title(ui_title)
+            #Prompt user for director
+            ui_director = input('Enter new director (current: ' + movies[i].get_director() + '): ')
+            #Check to see if blank
+            if(ui_director != ''):
+                #Update director
+                movies[i].set_director(ui_director)
+            #Prompt user to change genre
+            ui_genre = input('Enter new genre (current: ' + movies[i].get_genre_name() + ') (Yes/Y, No/N)? ')
+            #Check if user wants to change genre
+            if(ui_genre.upper() == 'Y' or ui_genre.upper() == 'YES'):
+                #Update genre
+                #Retrieve Genre Names and Keys
+                genre_list = movies[0].list_genre()
+                genre_keys = movies[0].get_genre_keys()
+                j = 0
+                #Output possible genres
+                print('\n\tGenres')
+                for item in range(len(genre_list)):
+                    #Format output
+                    current_index = str(j) + ')'
+                    print(f'{'\t'}{current_index}{genre_list[j]}')
+                    j += 1
+                #Query user for genre selection
+                ui_genre = int(input('\tChoose genre(0-9): '))
+                #Validate Genre selection
+                while ui_genre not in genre_keys:
+                    print('Invalid Genre: Enter a valid genre (0-9)')
+                    ui_genre = int(input('\tChoose genre(0-9): '))
+            #Prompt user to change price
+            ui_price = input('Enter new price (current: ' + str(movies[i].get_price()) + '): ')
+            #Check to see if blank
+            if(ui_price != ''):
+                #Update price
+                movies[i].set_price(float(ui_price))
+            #Return Success Message
+            return 'Movie with ID ' + movies[i].get_movie_id() + ' is updated successfully. \n'
+    #Movie with ID not found, return failure message
+    return 'Movie with ID ' + str(ui_id) + ' is not found in library. \n'
 def print_menu():
     '''
     Parameters: None
@@ -271,7 +360,14 @@ def main():
             elif(user_input == '4'):
                 #Call add_movie function and print resulting message
                 print(add_movie(catalog))
-                pass
+            #Remove a movie function call
+            elif(user_input == '5'):
+                #Call remove_movie function and print resulting message
+                print(remove_movie(catalog))
+            #Update movie details function call
+            elif(user_input == '6'):
+                #Call update_movie_details function and print resulting message
+                print(update_movie_details(catalog))
             user_input = print_menu()
     pass
 
