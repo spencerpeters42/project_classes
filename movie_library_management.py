@@ -163,25 +163,8 @@ def add_movie(movies):
     ui_title = input('Enter title: ')
     #Query user for director name
     ui_director = input('Enter director: ')
-
-    #Retrieve Genre Names and Keys
-    genre_list = movies[0].list_genre()
-    genre_keys = movies[0].get_genre_keys()
-    i = 0
-    #Output possible genres
-    print('\n\tGenres')
-    for item in range(len(genre_list)):
-        #Format output
-        current_index = str(i) + ')'
-        print(f'{'\t'}{current_index}{genre_list[i]}')
-        i += 1
-    #Query user for genre selection
-    ui_genre = int(input('\tChoose genre(0-9): '))
-    
-    #Validate Genre selection
-    while ui_genre not in genre_keys:
-        print('Invalid Genre: Enter a valid genre (0-9)')
-        ui_genre = int(input('\tChoose genre(0-9): '))
+    #Query user for genre
+    ui_genre = get_genre()
     #Query user for price of movie
     ui_price = float(input('\nEnter price: '))
     #Add movie to catalog, making it available to rent and setting rental count to 0
@@ -251,23 +234,8 @@ def update_movie_details(movies):
             #Check if user wants to change genre
             if(ui_genre.upper() == 'Y' or ui_genre.upper() == 'YES'):
                 #Update genre
-                #Retrieve Genre Names and Keys
-                genre_list = movies[0].list_genre()
-                genre_keys = movies[0].get_genre_keys()
-                j = 0
-                #Output possible genres
-                print('\n\tGenres')
-                for item in range(len(genre_list)):
-                    #Format output
-                    current_index = str(j) + ')'
-                    print(f'{'\t'}{current_index}{genre_list[j]}')
-                    j += 1
-                #Query user for genre selection
-                ui_genre = int(input('\tChoose genre(0-9): '))
-                #Validate Genre selection
-                while ui_genre not in genre_keys:
-                    print('Invalid Genre: Enter a valid genre (0-9)')
-                    ui_genre = int(input('\tChoose genre(0-9): '))
+                update_genre = get_genre()
+                movies[i].set_genre(update_genre)
             #Prompt user to change price
             ui_price = input('Enter new price (current: ' + str(movies[i].get_price()) + '): ')
             #Check to see if blank
@@ -278,6 +246,81 @@ def update_movie_details(movies):
             return 'Movie with ID ' + movies[i].get_movie_id() + ' is updated successfully. \n'
     #Movie with ID not found, return failure message
     return 'Movie with ID ' + str(ui_id) + ' is not found in library. \n'
+
+def get_genre():
+    '''
+    Parameters: None.
+    Return Value:
+        -The user's valid menu choice as a string.
+    Description:
+        -Displays the genre codes and descriptions and prompts the user for a valid choice.
+    '''
+    #Retrieve Genre Names and Keys
+    movies = Movie(0, '', '', 0, True, 0.00)
+    genre_list = movies.list_genre()
+    genre_keys = movies.get_genre_keys()
+    i = 0
+    #Output possible genres
+    print('\n\tGenres')
+    for item in range(len(genre_list)):
+        #Format output
+        current_index = str(i) + ')'
+        print(f'{'\t'}{current_index}{genre_list[i]}')
+        i += 1
+    #Query user for genre selection
+    ui_genre = int(input('\tChoose genre(0-9): '))
+    
+    #Validate Genre selection
+    while ui_genre not in genre_keys:
+        print('Invalid Genre: Enter a valid genre (0-9)')
+        ui_genre = int(input('\tChoose genre(0-9): '))
+    return ui_genre
+
+def list_movies_by_genre(movies):
+    '''
+    Parameters:
+        -movies: A list of Movie objects.
+    Return Value: None
+    Description:
+        -Lists all movies of a specified genre. Displays a list of movies in the specified genre, or no movies found.
+    '''
+    user_input = get_genre()
+    i = 0
+    matched = False
+    matching_movies = []
+
+    for movie in movies:
+        if(user_input == movies[i].get_genre()): 
+            matched = True
+            matching_movies.append(movies[i])
+        i += 1
+    
+    if(matched == True):
+        print_movies(matching_movies)
+    else:
+        print('No movies found.')
+
+    print()
+
+def print_movies(movies):
+    '''
+    Parameters:
+        -movies: A list of Movie objects.
+    Return Value: None.
+    Description:
+        -Prints a list of movies in a formatted table.
+    '''
+    i = 0
+    print('\n', MENU_HEADER, sep='')
+    print(DASHES)
+    for movie in movies:
+        print(f'{movies[i].get_movie_id():<10}{movies[i].get_title():<30}{movies[i].get_director():<25}{movies[i].get_genre_name():<12}{movies[i].get_availability():<19}{movies[i].get_price():<8}{movies[i].get_rental_count():>9}', end='')
+        i += 1
+    pass
+
+def popular_movies(movies):
+
+    pass
 def print_menu():
     '''
     Parameters: None
@@ -310,8 +353,6 @@ def print_menu():
     #Return user input
     return user_input
 
-
-
 def main():
     #Reads in file name
     file_name = input('Enter the movie catalog filename: ')
@@ -335,14 +376,7 @@ def main():
                     print('No matching movies found.\n')
                 else:
                     #Display all matched movies
-                    print()
-                    print(MENU_HEADER)
-                    print(DASHES)
-                    i = 0
-                    #Outputting each matching movie formatted properly
-                    for movie in matched_movies:
-                        print(f'{matched_movies[i].get_movie_id():<10}{matched_movies[i].get_title():<30}{matched_movies[i].get_director():<25}{matched_movies[i].get_genre_name():<12}{matched_movies[i].get_availability():<19} {matched_movies[i].get_price():<8}{matched_movies[i].get_rental_count():>9}', end='')
-                        i += 1
+                    print_movies(matched_movies)
                     print()
             #Rent a movie function call
             elif(user_input == '2'):
@@ -368,6 +402,10 @@ def main():
             elif(user_input == '6'):
                 #Call update_movie_details function and print resulting message
                 print(update_movie_details(catalog))
+            #List movies by genre function call
+            elif(user_input == '7'):
+                list_movies_by_genre(catalog)
+            #Find popular movies
             user_input = print_menu()
     pass
 
