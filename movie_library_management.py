@@ -311,15 +311,93 @@ def print_movies(movies):
         -Prints a list of movies in a formatted table.
     '''
     i = 0
+    #Print Header
     print('\n', MENU_HEADER, sep='')
     print(DASHES)
+    #Format each element and output.
     for movie in movies:
         print(f'{movies[i].get_movie_id():<10}{movies[i].get_title():<30}{movies[i].get_director():<25}{movies[i].get_genre_name():<12}{movies[i].get_availability():<19}{movies[i].get_price():<8}{movies[i].get_rental_count():>9}', end='')
         i += 1
     pass
 
 def popular_movies(movies):
+    '''
+    Parameters:
+        -movies: A list of Movie objects.
+    Return Value: None.
+    Description:
+        -Displays all the movies that have a rental_count >= to the entered value.
+    '''
+    #Query the user for input
+    user_input = input('Enter the minimum number of rentals for the movies you want to view: ')
+    #Matching list of movies
+    matches = []
+    i = 0
+    #Check every movies rental count
+    for movie in range(len(movies)):
+        #Check if rental_count is higher than user_input
+        if(int(movies[i].get_rental_count()) >= int(user_input)):
+            #Add movie to matching list
+            matches.append(movies[i])
+        i += 1
+    #Outputs
+    print('\nMovies Rented', user_input, 'times or more', end='')
+    #Format matching list and outputted
+    print_movies(matches)
+    print()
+    pass
 
+def check_availability_by_genre(movies):
+    '''
+    Parameters:
+        -movies: A list of Movie objects.
+    Return Value: None.
+    Description:
+        -Checks and displays the availability of movies in a specified genre.
+        -Displays a list of movies that are available in the specified genre or no available movies.
+    '''
+    #Get genre from user
+    user_input = get_genre()
+    #Create matching list
+    matches = []
+    i = 0
+    #Check all movies for specified genre and if they are available
+    for movie in movies:
+        if((movies[i].get_genre() == user_input) and (movies[i].get_availability() == 'Available')):
+            matches.append(movies[i])
+        i += 1
+    #If no matches found
+    if(len(matches) == 0):
+        print('No movies available in that genre')
+    else:
+        #Output matching movies
+        print_movies(matches)
+        print()
+    pass
+
+def display_library_summary(movies):
+    '''
+    Parameters:
+        -movies: A list of Movie objects.
+    Return Value: None.
+    Description:
+        -Displays a summary of the library, including the total number of movies, number of available movies, and number of rented movies.
+    '''
+    total_movies = len(movies)
+    available_movies = 0
+    rented_movies = 0
+    i = 0
+    for movie in movies:
+        if(movies[i].get_availability() == 'Available'):
+            available_movies += 1
+        else:
+            rented_movies += 1
+        i += 1
+    print()
+    print(f'{'Total movies':16}{':':4}{total_movies:4}')
+    print(f'{'Available movies':16}{':':4}{available_movies:4}')
+    print(f'{'Rented movies':16}{':':4}{rented_movies:4}')
+    print()
     pass
 def print_menu():
     '''
@@ -365,7 +443,7 @@ def main():
         user_input = print_menu()
         #Continue displaying menu until user selects Exit the system.
         while user_input != '0':
-            #Search for movies function call
+            #Search for movies menu option
             if(user_input == '1'):
                 #Prompt the user for search term
                 search_term = input('Enter search term: ')
@@ -378,34 +456,46 @@ def main():
                     #Display all matched movies
                     print_movies(matched_movies)
                     print()
-            #Rent a movie function call
+            #Rent a movie menu option
             elif(user_input == '2'):
                 #Prompt the user for ID to rent
                 rent_id = input('Enter the movie ID to rent: ')
                 #Print result of rental attempt
                 print(rent_movie(catalog, rent_id))
-            #Return a movie function call
+            #Return a movie menu option
             elif(user_input == '3'):
                 #Prompt the user for ID to return
                 return_id = input('Enter the movie ID to return: ')
                 #Print result of return attempt
                 print(return_movie(catalog, return_id))
-            #Add a movie function call
+            #Add a movie menu option
             elif(user_input == '4'):
                 #Call add_movie function and print resulting message
                 print(add_movie(catalog))
-            #Remove a movie function call
+            #Remove a movie menu option
             elif(user_input == '5'):
                 #Call remove_movie function and print resulting message
                 print(remove_movie(catalog))
-            #Update movie details function call
+            #Update movie details menu option
             elif(user_input == '6'):
                 #Call update_movie_details function and print resulting message
                 print(update_movie_details(catalog))
-            #List movies by genre function call
+            #List movies by genre menu option
             elif(user_input == '7'):
+                #Call list_movies_by_genre function
                 list_movies_by_genre(catalog)
-            #Find popular movies
+            #Find popular movies menu option
+            elif(user_input == '8'):
+                #Call popular_movies function
+                popular_movies(catalog)
+            #Check availability by genre menu option
+            elif(user_input == '9'):
+                #Call check_availability_by_genre function
+                check_availability_by_genre(catalog)
+            #Display library summary menu option
+            elif(user_input == '10'):
+                #Call display_library_summary function
+                display_library_summary(catalog)
             user_input = print_menu()
     pass
 
