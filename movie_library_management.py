@@ -15,31 +15,62 @@ def load_movies(file_name):
     '''
     #Validating file path
     if os.path.exists(file_name):
+        #Open file
         import_movie = open(file_name)
         loaded_movies = 0
+        #Create an empty list
         movie_catalog = list()
+        #Go through text file line by line
         for each_line in import_movie:
+            #Split by every ','
             each_line = each_line.split(',')
+            #Add a Movie object with corresponding fields
             movie_catalog.append(Movie(each_line[0], each_line[1], each_line[2], int(each_line[3]), each_line[4], each_line[5], each_line[6]))
+            #Increment total movies loaded
             loaded_movies += 1
         print('')
+        #Return filled list of Movie objects
         return movie_catalog
     else:
+        #Output that the file name was not found
         print('The catalog file \"', file_name, '\" is not found \n')
-        
+        #Prompt the user to continue without file
         user_input = input('Do you want to continue without loading a file (Yes/Y, No/N)? ').upper()
         
         if(user_input == 'Y' or user_input == 'YES'):
             print('The Movie Library System is opened without loading catalog \n')
+            #Create an empty list to return
             movie_catalog = list()
+            #Return empty catalog list
             return movie_catalog
         elif(user_input == 'N' or user_input == 'NO'):
             print('The Movie Library System will not continue...')
+            #Return -1 to skip the menu and end program.
             return -1
 
 
 def save_movies(file_name, movies):
-    pass
+    '''
+    Parameters:
+        -file_name: The name of the file to save the movie data.
+        -movies: A list of Movie objects.
+    Return Value:
+        - # of movie lines written to file
+    Description:
+        -Saves the list of Movie objects to a CSV file.
+    '''
+    #Open file
+    catalog = open(file_name, 'w')
+    i = 0
+
+    for movie in movies:
+        #Write with specified format to file
+        catalog.write(f'{movies[i].get_id()},{movies[i].get_title()},{movies[i].get_director()},{movies[i].get_genre()},{movies[i].get_availability()},{movies[i].get_price()},{movies[i].get_rental_count()}\n')
+        i += 1
+    #Close file
+    catalog.close()
+    #Return iteration variable
+    return i
 
 def search_movies(movies, search_term):
     '''
@@ -51,13 +82,19 @@ def search_movies(movies, search_term):
     Description:
         -Searches for movies that match that search term.
     '''
+    #Output looking for movie
     print('Searching for \"', search_term, '\" in title, director, or genre...', sep='')
     i = 0
+    #Create an empty list for matches
     matches = []
+    #Look through all movies
     for movie in movies:
+        #Check if search term matches any category of movie object
         if(search_term.upper() in movies[i].get_title().upper() or search_term.upper() in movies[i].get_genre_name().upper() or search_term.upper() in movies[i].get_director().upper()):
+            #Add movie to matches
             matches.append(movies[i])
         i+=1
+    #Return matching list of Movie objects
     return matches
 
 def find_movie_by_id(movies, movie_id):
@@ -71,11 +108,14 @@ def find_movie_by_id(movies, movie_id):
         -Searches for movies that match that search term.
     '''
     i = 0
+    #Look through all movies
     for movie in movies:
+        #Check to see if input matches with every ID
         if(movie_id == movies[i].get_id()):
+            #Return matching Movie object
             return movies[i]
         i += 1
-    
+    #Return -1 if no Movie object was found
     return -1
 
 
@@ -168,7 +208,7 @@ def add_movie(movies):
     #Query user for price of movie
     ui_price = float(input('\nEnter price: '))
     #Add movie to catalog, making it available to rent and setting rental count to 0
-    movies.append(Movie(ui_id, ui_title, ui_director, ui_genre, True, ui_price, 0))
+    movies.append(Movie(ui_id, ui_title, ui_director, ui_genre, True, ui_price))
     #Case 2: Successfully Add Movie with no Conflicting ID
     return 'Movie ' + '\'' + ui_title + '\'' + ' added to library successfully .\n'
 
@@ -244,6 +284,7 @@ def update_movie_details(movies):
                 movies[i].set_price(float(ui_price))
             #Return Success Message
             return 'Movie with ID ' + movies[i].get_id() + ' is updated successfully. \n'
+        i += 1
     #Movie with ID not found, return failure message
     return 'Movie with ID ' + str(ui_id) + ' is not found in library. \n'
 
@@ -317,7 +358,9 @@ def print_movies(movies):
     print(DASHES)
     #Format each element and output.
     for movie in movies:
-        print(f'{movies[i].get_id():<10}{movies[i].get_title():<30}{movies[i].get_director():<25}{movies[i].get_genre_name():<12}{movies[i].get_availability():<19}{movies[i].get_price():<8}{movies[i].get_rental_count():>9}', end='')
+        rental_cnt = str(movies[i].get_rental_count())
+        rental_cnt = rental_cnt.strip('\n')
+        print(f'{movies[i].get_id():<10}{movies[i].get_title():<30}{movies[i].get_director():<25}{movies[i].get_genre_name():<12}{movies[i].get_availability():<19}{movies[i].get_price():<8}{rental_cnt:>9}')
         i += 1
     pass
 
@@ -437,6 +480,7 @@ def main():
     file_name = input('Enter the movie catalog filename: ')
     #Stores Movie objects in a list
     catalog = load_movies(file_name)
+    
     if(catalog == -1):
         print('Movie Library System Closed Successfully\n')
     else:
@@ -498,7 +542,16 @@ def main():
                 #Call display_library_summary function
                 display_library_summary(catalog)
             user_input = print_menu()
-    pass
+        #Prompt the user to update file or discard changes
+        update = input('Would you like to update the catalog (Yes/Y, No/N)? ').upper()
+        #Write changes to file
+        if(update == 'Y' or update == 'YES'):
+            movies_written = save_movies(file_name, catalog)
+            print(movies_written, 'movies have been written to Movie catalog.')
+        else:
+            print('Movie catalog has not been updated.')
+        #End program
+        print('Movie Library System Closed Successfully')
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 class Movie:
     '''A class that stores information about movies.'''
-
+    
     #Constructor
     def __init__(self, movie_id, title, director, genre, available, price, rental_count = 0):
         self.__movie_id = movie_id
@@ -12,6 +12,7 @@ class Movie:
         self.__rental_count = rental_count
         self.__GENRE_NAME = {0: 'Action', 1: 'Comedy', 2: 'Drama', 3: 'Horror', 4: 'Sci-Fi',
         5: 'Romance', 6: 'Thriller', 7: 'Animation', 8: 'Documentary', 9: 'Fantasy'}
+
     
     #Getters
     def get_id(self):
@@ -51,6 +52,9 @@ class Movie:
     
     def get_genre_keys(self):
         return self.__GENRE_NAME.keys()
+    
+    def get_total_movies(self):
+        return self.total_movies
     
     #Setters
     def set_id(self, movie_id):
