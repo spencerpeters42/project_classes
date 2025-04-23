@@ -14,7 +14,7 @@ class Movie:
         5: 'Romance', 6: 'Thriller', 7: 'Animation', 8: 'Documentary', 9: 'Fantasy'}
     
     #Getters
-    def get_movie_id(self):
+    def get_id(self):
         return self.__movie_id
     
     def get_title(self):
@@ -53,7 +53,7 @@ class Movie:
         return self.__GENRE_NAME.keys()
     
     #Setters
-    def set_movie_id(self, movie_id):
+    def set_id(self, movie_id):
         self.__movie_id = movie_id
 
     def set_title(self, title):
@@ -74,6 +74,23 @@ class Movie:
     def set_rental_count(self, rental_count):
         self.__rental_count = rental_count
     
-    def __str__():
-        return "{:10s}{:30s}{:25s}{:12s}{:12s}{:>12s}{:>12s}".format("ID", "Title",
-        "Director", "Genre", "Availability", "Price", "# Rentals")
+    #Methods
+    def borrow_movie(self):
+        '''
+        Description:
+            -When borrowing a movie, it sets its available attribute to False and increases the rental count attribute by 1.
+        '''
+        self.set_available(False)
+        rental_count = self.get_rental_count()
+        self.set_rental_count(rental_count + 1)
+
+    def return_movie(self):
+        '''
+        Description:
+            -When returning a movie, it sets its available attribute to True.
+        '''
+        self.set_available(True)
+
+    def __str__(self):
+        return "{:10}{:30s}{:25s}{:12s}{:12s}{:>12}{:>12}".format(str(self.get_id()), str(self.get_title()),
+        str(self.get_director()), str(self.get_genre_name()), str(self.get_availability()), self.get_price(), self.get_rental_count())

@@ -72,7 +72,7 @@ def find_movie_by_id(movies, movie_id):
     '''
     i = 0
     for movie in movies:
-        if(movie_id == movies[i].get_movie_id()):
+        if(movie_id == movies[i].get_id()):
             return movies[i]
         i += 1
     
@@ -154,7 +154,7 @@ def add_movie(movies):
     i = 0
     #Check to see if ID already exists
     for movie in movies:
-        if(ui_id == movies[i].get_movie_id()):
+        if(ui_id == movies[i].get_id()):
             fail_msg = 'Movie with ID ' + ui_id + ' already exists - cannot be added to library \n'
             #Case 1: Cannot Add Movie because of conflicting ID 
             return fail_msg
@@ -188,7 +188,7 @@ def remove_movie(movies):
     #Look through all movies for ID
     for movie in movies:
         #Check to see if ID is in list
-        if(user_input == int(movies[i].get_movie_id())):
+        if(user_input == int(movies[i].get_id())):
             #Store title for success message
             del_title = movies[i].get_title()
             #Delete Movie
@@ -214,7 +214,7 @@ def update_movie_details(movies):
     i = 0
     #Check to see if ID is in list
     for movie in movies:
-        if(ui_id == int(movies[i].get_movie_id())):
+        if(ui_id == int(movies[i].get_id())):
             #Update Movie
             print('Leave fields blank to keep current values.')
             #Prompt user for title
@@ -243,7 +243,7 @@ def update_movie_details(movies):
                 #Update price
                 movies[i].set_price(float(ui_price))
             #Return Success Message
-            return 'Movie with ID ' + movies[i].get_movie_id() + ' is updated successfully. \n'
+            return 'Movie with ID ' + movies[i].get_id() + ' is updated successfully. \n'
     #Movie with ID not found, return failure message
     return 'Movie with ID ' + str(ui_id) + ' is not found in library. \n'
 
@@ -297,6 +297,7 @@ def list_movies_by_genre(movies):
     
     if(matched == True):
         print_movies(matching_movies)
+        print()
     else:
         print('No movies found.')
 
@@ -316,7 +317,7 @@ def print_movies(movies):
     print(DASHES)
     #Format each element and output.
     for movie in movies:
-        print(f'{movies[i].get_movie_id():<10}{movies[i].get_title():<30}{movies[i].get_director():<25}{movies[i].get_genre_name():<12}{movies[i].get_availability():<19}{movies[i].get_price():<8}{movies[i].get_rental_count():>9}', end='')
+        print(f'{movies[i].get_id():<10}{movies[i].get_title():<30}{movies[i].get_director():<25}{movies[i].get_genre_name():<12}{movies[i].get_availability():<19}{movies[i].get_price():<8}{movies[i].get_rental_count():>9}', end='')
         i += 1
     pass
 
