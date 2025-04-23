@@ -1,3 +1,27 @@
+#   Movie Library Management System
+#
+#   Description:
+#               This program reads in a CSV file and creates Movie objects from the Movie class. After completing operations on Movie 
+#               objects the program either edits or creates a CSV file with changes made during runtime of program.
+#   
+#   Functions:  load_movies, save_movies, find_movie_by_id, rent_movie, return_movie, add_movie, remove_movie
+#               update_movie_details, get_genre, list_movies_by_genre, print_movies, popular_movies, check_availability_by_genre
+#               display_library_summary, print_menu, main.
+#
+#   Calculations:
+#                Most of the calculations are iterating the rental_count variables or checking for certain properties of a Movie object.
+#                
+#                Functions that output a list of movies use the structure of creating a list of movie objects, checking if a certain condition
+#                is true and if so appending it to a list of movie objects. The list of movie objects is then passed to print_movies for display.
+#
+#                Functions that require user validated input such as print_menu and get_genre handle input validation within the function call and
+#                return a validated user input.
+#
+#
+#   Authors: Spencer Peters, Protsahan Lama, Shaun Pineda
+#   Date: 4/23/2025
+#
+
 import os
 from movie import Movie
 #Define Constants
@@ -65,7 +89,9 @@ def save_movies(file_name, movies):
 
     for movie in movies:
         #Write with specified format to file
-        catalog.write(f'{movies[i].get_id()},{movies[i].get_title()},{movies[i].get_director()},{movies[i].get_genre()},{movies[i].get_availability()},{movies[i].get_price()},{movies[i].get_rental_count()}\n')
+        rental_cnt = str(movies[i].get_rental_count())
+        rental_cnt = rental_cnt.strip('\n')
+        catalog.write(f'{movies[i].get_id()},{movies[i].get_title()},{movies[i].get_director()},{movies[i].get_genre()},{movies[i].get_availability()},{movies[i].get_price()},{rental_cnt}\n')
         i += 1
     #Close file
     catalog.close()
