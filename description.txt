@@ -6,7 +6,7 @@ popular movies based upon how many times they have been rented,
 check the movies availability by genre, and display a summary of the
 movies library.
 
-
+1
 
 Methods:
 
